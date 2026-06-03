@@ -130,6 +130,7 @@ GameObject:
   - component: {fileID: 1440568745}
   - component: {fileID: 1440568744}
   - component: {fileID: 1440568743}
+  - component: {fileID: 1440568746}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -184,7 +185,7 @@ MonoBehaviour:
   NetworkConfig:
     ProtocolVersion: 0
     NetworkTransport: {fileID: 1440568743}
-    PlayerPrefab: {fileID: 0}
+    PlayerPrefab: {fileID: 6092488019363211405, guid: 9082650e39d3ee14fa422b598766ddfc, type: 3}
     Prefabs:
       NetworkPrefabsLists:
       - {fileID: 11400000, guid: 6c6593f0f242fae4188af33bdfa3509a, type: 2}
@@ -226,6 +227,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1440568746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1440568742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57c315871b1fe374a927ddbe2f4fc278, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ServerController
 --- !u!1 &1788885035
 GameObject:
   m_ObjectHideFlags: 0
