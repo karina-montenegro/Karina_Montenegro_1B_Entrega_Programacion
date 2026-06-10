@@ -242,6 +242,7 @@ GameObject:
   - component: {fileID: 7757254523062553761}
   - component: {fileID: 6329603382766925604}
   - component: {fileID: 2821883477726743322}
+  - component: {fileID: 3804783440238336311}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -439,6 +440,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NetworkPlayerConfig
   ShowTopMostFoldoutHeaderGroup: 1
   _playerInput: {fileID: 3832205748818721162}
+--- !u!114 &3804783440238336311
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6092488019363211405}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04b5cfdc0a1a41445a9f193f9c291a2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerColor
+  ShowTopMostFoldoutHeaderGroup: 1
+  _renderer: {fileID: 115813730589927514}
+  _colors:
+  - {fileID: 2100000, guid: cd0c661529ee9cd4898ce23612ccf7fd, type: 2}
+  - {fileID: 2100000, guid: 23f3fac507fd7094caed4a9da7d7fa3c, type: 2}
+  - {fileID: 2100000, guid: cd0c661529ee9cd4898ce23612ccf7fd, type: 2}
+  - {fileID: 2100000, guid: 23f3fac507fd7094caed4a9da7d7fa3c, type: 2}
 --- !u!1 &6821342998339829704
 GameObject:
   m_ObjectHideFlags: 0
