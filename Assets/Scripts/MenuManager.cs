@@ -1,70 +1,108 @@
 using Unity.Netcode;
-using Unity.Netcode.Transports.UTP; // Necesario para cambiar la IP por código
+using Unity.Netcode.Transports.UTP;
 using TMPro;
 using UnityEngine;
+
 public class MenuManager : MonoBehaviour
 {
+    public static MenuManager Instance { get; private set; }
+
     [Header("Paneles de la UI")]
     [SerializeField] private GameObject _MainMenu;
     [SerializeField] private GameObject _Join;
     [SerializeField] private GameObject _WaitPlayer;
+    [SerializeField] private GameObject _UIGameplay;
+    [SerializeField] private GameObject _ResultPanel;
+
     [Header("Configuracion de Red")]
     [SerializeField] private TMP_InputField _ipInputField;
-    [SerializeField] private string _ipPorDefecto = "127.0.0.1"; //colocar ip en inspector
+    [SerializeField] private string _ipPorDefecto = "127.0.0.1";
+
+    [Header("Timer")]
+    [SerializeField] private TMP_Text _timerText;
+
+    [Header("Resultado")]
+    [SerializeField] private TMP_Text _resultText;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     private void Start()
     {
-        // Al empezar el juego, nos aseguramos de que solo se vea el menú principal
         _MainMenu.SetActive(true);
         _Join.SetActive(false);
-        if (_WaitPlayer != null)
-        {
-            _WaitPlayer.SetActive(false);
-        }
+        _WaitPlayer?.SetActive(false);
+        _UIGameplay?.SetActive(false);
+        _ResultPanel?.SetActive(false);
 
         if (_ipInputField != null)
-        {
             _ipInputField.text = _ipPorDefecto;
-        }
     }
-    // Función para el botón SER HOST
+
     public void StartHost()
     {
         NetworkManager.Singleton.StartHost();
-        // Apagamos todo el menú para que no estorbe en el gameplay
         _MainMenu.SetActive(false);
-        if (_WaitPlayer != null)
-        {
-            _WaitPlayer.SetActive(true);
-        }
+        _WaitPlayer?.SetActive(true);
     }
-    // Función para el botón CONECTAR (Cliente)
+
     public void StartClient()
     {
-        // 1. Leemos lo que el usuario escribió en el cuadro de texto
-        string ipAddress = _ipInputField.text;
-        // Si el usuario no escribió nada, le ponemos la IP local por defecto
+        string ipAddress = _ipInputField != null ? _ipInputField.text : _ipPorDefecto;
         if (string.IsNullOrEmpty(ipAddress) || ipAddress.Length < 5)
-        {
             ipAddress = _ipPorDefecto;
-        }
-        // 2. Le asignamos esa IP al componente de transporte de Netcode
+
         if (NetworkManager.Singleton.NetworkConfig.NetworkTransport is UnityTransport transport)
-        {
             transport.ConnectionData.Address = ipAddress;
-        }
-        // 3. Conectamos al jugador como Cliente
+
         NetworkManager.Singleton.StartClient();
-        // Apagamos la pantalla de unirse para que pueda jugar
         _Join.SetActive(false);
-        if (_WaitPlayer != null)
+        _WaitPlayer?.SetActive(true);
+    }
+
+    public void ShowGameUI()
+    {
+        _WaitPlayer?.SetActive(false);
+        _UIGameplay?.SetActive(true);
+    }
+
+    public void UpdateTimer(float seconds)
+    {
+        if (_timerText == null) return;
+        int mins = Mathf.FloorToInt(seconds / 60f);
+        int secs = Mathf.FloorToInt(seconds % 60f);
+        _timerText.text = $"{mins:00}:{secs:00}";
+    }
+
+    public void ShowResult(GameResult result)
+    {
+        _UIGameplay?.SetActive(false);
+        _ResultPanel?.SetActive(true);
+
+        if (_resultText != null)
         {
-            _WaitPlayer.SetActive(true);
+            _resultText.text = result switch
+            {
+                GameResult.Win => "¡GANASTE!",
+                GameResult.Lose => "PERDISTE",
+                GameResult.Draw => "EMPATE",
+                _ => ""
+            };
         }
     }
-    // Función para el botón SALIR
+
+    public void BackToMenu()
+    {
+        NetworkManager.Singleton.Shutdown();
+        _ResultPanel?.SetActive(false);
+        _UIGameplay?.SetActive(false);
+        _MainMenu.SetActive(true);
+    }
+
     public void SalirDelJuego()
     {
-        Debug.Log("Saliendo del juego...");
         Application.Quit();
     }
 }
