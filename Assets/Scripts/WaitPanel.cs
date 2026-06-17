@@ -10,11 +10,11 @@ public class WaitPanel : MonoBehaviour
     {
         if (NetworkManager.Singleton == null || !NetworkManager.Singleton.IsListening)
         {
-            // Si se desconectó, reseteamos para poder suscribirse de nuevo
+            // Si se desconecta, reseteamos para poder suscribirse de nuevo
             if (_subscribed)
             {
                 _subscribed = false;
-                // Ocultamos el panel cuando se cierra la sesión
+                // Ocultamos el panel cuando se cierra la sesion
                 if (_waitPanel != null)
                     _waitPanel.SetActive(false);
             }

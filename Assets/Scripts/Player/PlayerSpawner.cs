@@ -18,8 +18,7 @@ public class PlayerSpawner : MonoBehaviour
 
     private IEnumerator SuscribirseCuandoExistaNetworkManager()
     {
-        // Esperamos hasta que el NetworkManager.Singleton esté listo,
-        // por si este script se inicializa antes de que Netcode termine de configurarse
+        // Esperar hasta que el NetworkManager.Singleton esté listo
         while (NetworkManager.Singleton == null)
             yield return null;
 
@@ -34,13 +33,13 @@ public class PlayerSpawner : MonoBehaviour
 
     private void OnClientConnected(ulong clientId)
     {
-        // Esta lógica solo debe ejecutarse en el servidor/host, que es quien tiene autoridad sobre las posiciones
+        // ejecutarse en el servidor/host
         if (!NetworkManager.Singleton.IsServer) return;
 
         if (_spawnPoints == null || _spawnPoints.Length == 0)
             return;
 
-        // Buscamos el NetworkObject del jugador que se acaba de conectar
+        // Busca el NetworkObject del jugador que se acaba de conectar
         if (!NetworkManager.Singleton.ConnectedClients.TryGetValue(clientId, out NetworkClient client))
             return;
 
@@ -48,7 +47,7 @@ public class PlayerSpawner : MonoBehaviour
         if (playerObject == null)
             return;
 
-        // Elegimos el spawn point según el orden de conexión, sin pasarnos del array
+        // Elegir el spawn point según el orden de conexión
         int indice = _siguienteIndiceSpawn % _spawnPoints.Length;
         Transform spawnPoint = _spawnPoints[indice];
 

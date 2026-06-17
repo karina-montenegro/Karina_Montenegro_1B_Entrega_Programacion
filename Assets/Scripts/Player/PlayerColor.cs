@@ -8,7 +8,7 @@ public class PlayerColor : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        // Solo el dueño del personaje calcula su color y le avisa al Server
+        // Solo el host calcula su color y le avisa al Server
         if (IsOwner)
         {
             int index = (int)(OwnerClientId % (ulong)_colors.Length);
@@ -16,15 +16,15 @@ public class PlayerColor : NetworkBehaviour
         }
     }
 
-    // 1. El cliente le pide permiso al Servidor
+    // El cliente le pide permiso al Servidor
     [Rpc(SendTo.Server)]
     private void SolicitarColorAlServerRpc(int colorIndex)
     {
-        // 2. El servidor recibe la orden y la replica a todos los jugadores
+        // El servidor recibe la orden y la replica a todos los jugadores
         EnviarColorATodosRpc(colorIndex);
     }
 
-    // 3. Esto se ejecuta en las pantallas de todos los jugadores
+    // se ejecuta en las pantallas de todos los jugadores
     [Rpc(SendTo.Everyone)]
     private void EnviarColorATodosRpc(int colorIndex)
     {

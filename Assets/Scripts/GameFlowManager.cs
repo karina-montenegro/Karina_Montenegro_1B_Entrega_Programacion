@@ -19,7 +19,6 @@ public class GameFlowManager : NetworkBehaviour
     private void Awake()
     {
         Instance = this;
-        Debug.Log("[GameFlow] Awake, Instance seteado.");
     }
 
     public override void OnNetworkSpawn()
@@ -54,7 +53,6 @@ public class GameFlowManager : NetworkBehaviour
 
     private void HandleClientConnected(ulong clientId)
     {
-        Debug.Log($"[GameFlow] Cliente conectado: {clientId}");
         CheckPlayerCount();
     }
 
@@ -63,13 +61,11 @@ public class GameFlowManager : NetworkBehaviour
         if (!IsServer || GameStarted.Value) return;
 
         int count = NetworkManager.Singleton.ConnectedClientsList.Count;
-        Debug.Log($"[GameFlow] Chequeando jugadores: {count}");
 
         if (count >= 2)
         {
             TimeRemaining.Value = _gameDuration;
-            GameStarted.Value = true;
-            Debug.Log("[GameFlow] GameStarted = true");
+            GameStarted.Value = true;   
         }
     }
 
@@ -100,8 +96,6 @@ public class GameFlowManager : NetworkBehaviour
             else clientScore = p.Score.Value;
         }
 
-        Debug.Log($"[GameFlow] EndGame - Host: {hostScore} Client: {clientScore}");
-
         ShowResultClientRpc(hostScore, clientScore);
     }
 
@@ -118,13 +112,11 @@ public class GameFlowManager : NetworkBehaviour
         else if (myScore < theirScore) result = GameResult.Lose;
         else result = GameResult.Draw;
 
-        Debug.Log($"[GameFlow] Resultado local: {result} (yo={myScore} rival={theirScore})");
-
         if (MenuManager.Instance != null)
             MenuManager.Instance.ShowResult(result);
     }
 
-    //avisa a todos los clientes que vuelvan al menu
+    //avisar a todos los clientes que vuelvan al menu
     [ClientRpc]
     public void BackToMenuClientRpc()
     {
@@ -134,7 +126,6 @@ public class GameFlowManager : NetworkBehaviour
 
     private void OnGameStartedChanged(bool oldVal, bool newVal)
     {
-        Debug.Log($"[GameFlow] OnGameStartedChanged -> {newVal}");
         if (newVal && MenuManager.Instance != null)
             MenuManager.Instance.ShowGameUI();
     }

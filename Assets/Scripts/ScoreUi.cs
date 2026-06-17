@@ -15,7 +15,7 @@ public class ScoreUI : MonoBehaviour
     {
         Instance = this;
     }
-    // Esta función recibe al jugador dueño de la pantalla local
+    // Esta funcion recibe al jugador dueño de la pantalla local
     public void SetLocalPlayer(PlayerInventory player)
     {
         localPlayer = player;
@@ -28,7 +28,7 @@ public class ScoreUI : MonoBehaviour
             localPlayer.Score.OnValueChanged += UpdateMyScoreText;
         }
     }
-    // Esta función recibe al jugador rival (réplica de red)
+    // Esta funcion recibe al jugador rival (replica de red)
     public void SetOtherPlayer(PlayerInventory player)
     {
         otherPlayer = player;
@@ -62,7 +62,6 @@ public class ScoreUI : MonoBehaviour
     }
     private void OnDestroy()
     {
-        // Limpieza fundamental de eventos usando los mismos métodos que suscribimos
         if (localPlayer != null)
         {
             localPlayer.Score.OnValueChanged -= UpdateMyScoreText;
@@ -77,4 +76,3 @@ public class ScoreUI : MonoBehaviour
         }
     }
 }
-
