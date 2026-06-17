@@ -71,6 +71,7 @@ public class MenuManager : MonoBehaviour
     public void UpdateTimer(float seconds)
     {
         if (_timerText == null) return;
+
         int mins = Mathf.FloorToInt(seconds / 60f);
         int secs = Mathf.FloorToInt(seconds % 60f);
         _timerText.text = $"{mins:00}:{secs:00}";
@@ -80,6 +81,7 @@ public class MenuManager : MonoBehaviour
     {
         _UIGameplay?.SetActive(false);
         _ResultPanel?.SetActive(true);
+        _ResultPanel.transform.SetAsLastSibling();
 
         if (_resultText != null)
         {
@@ -95,10 +97,15 @@ public class MenuManager : MonoBehaviour
 
     public void BackToMenu()
     {
+        Debug.Log("[Menu] BackToMenu presionado");
         NetworkManager.Singleton.Shutdown();
+        Debug.Log("[Menu] Shutdown ejecutado");
+
         _ResultPanel?.SetActive(false);
         _UIGameplay?.SetActive(false);
         _MainMenu.SetActive(true);
+
+        Debug.Log("[Menu] MainMenu activado");
     }
 
     public void SalirDelJuego()
