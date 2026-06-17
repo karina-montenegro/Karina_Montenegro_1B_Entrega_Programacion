@@ -26,11 +26,9 @@ public class GameFlowManager : NetworkBehaviour
     {
         base.OnNetworkSpawn();
 
-        // Suscripcion a cambios de red - corre en todos
         GameStarted.OnValueChanged += OnGameStartedChanged;
         TimeRemaining.OnValueChanged += OnTimeChanged;
 
-        // Si el cliente se conecta tarde y GameStarted ya es true, lo aplicamos ya
         if (GameStarted.Value)
         {
             if (MenuManager.Instance != null)
@@ -104,7 +102,6 @@ public class GameFlowManager : NetworkBehaviour
 
         Debug.Log($"[GameFlow] EndGame - Host: {hostScore} Client: {clientScore}");
 
-        // Enviamos ambos puntajes a todos, cada uno calcula su resultado
         ShowResultClientRpc(hostScore, clientScore);
     }
 
@@ -125,6 +122,14 @@ public class GameFlowManager : NetworkBehaviour
 
         if (MenuManager.Instance != null)
             MenuManager.Instance.ShowResult(result);
+    }
+
+    //avisa a todos los clientes que vuelvan al menu
+    [ClientRpc]
+    public void BackToMenuClientRpc()
+    {
+        if (MenuManager.Instance != null)
+            MenuManager.Instance.ExecuteBackToMenu();
     }
 
     private void OnGameStartedChanged(bool oldVal, bool newVal)

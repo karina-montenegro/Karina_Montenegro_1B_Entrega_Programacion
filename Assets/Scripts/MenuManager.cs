@@ -39,6 +39,19 @@ public class MenuManager : MonoBehaviour
 
         if (_ipInputField != null)
             _ipInputField.text = _ipPorDefecto;
+
+        // Conectar botón por código
+        var btn = _ResultPanel?.GetComponentInChildren<UnityEngine.UI.Button>();
+        if (btn != null)
+        {
+            btn.onClick.RemoveAllListeners();
+            btn.onClick.AddListener(BackToMenu);
+            Debug.Log("[Menu] Boton BackToMenu conectado por codigo");
+        }
+        else
+        {
+            Debug.LogError("[Menu] NO se encontro el boton en ResultPanel");
+        }
     }
 
     public void StartHost()
@@ -71,7 +84,6 @@ public class MenuManager : MonoBehaviour
     public void UpdateTimer(float seconds)
     {
         if (_timerText == null) return;
-
         int mins = Mathf.FloorToInt(seconds / 60f);
         int secs = Mathf.FloorToInt(seconds % 60f);
         _timerText.text = $"{mins:00}:{secs:00}";
@@ -80,8 +92,12 @@ public class MenuManager : MonoBehaviour
     public void ShowResult(GameResult result)
     {
         _UIGameplay?.SetActive(false);
+        _WaitPlayer?.SetActive(false);
         _ResultPanel?.SetActive(true);
         _ResultPanel.transform.SetAsLastSibling();
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
 
         if (_resultText != null)
         {
@@ -95,17 +111,38 @@ public class MenuManager : MonoBehaviour
         }
     }
 
+    // Llamado desde el boton
     public void BackToMenu()
     {
         Debug.Log("[Menu] BackToMenu presionado");
-        NetworkManager.Singleton.Shutdown();
-        Debug.Log("[Menu] Shutdown ejecutado");
+
+        // Si soy host, avisá a todos via ClientRpc primero
+        if (NetworkManager.Singleton != null && NetworkManager.Singleton.IsHost)
+        {
+            GameFlowManager.Instance?.BackToMenuClientRpc();
+            return; // El ClientRpc llama ExecuteBackToMenu en todos
+        }
+
+        // Si soy cliente solo, ejecuto directo
+        ExecuteBackToMenu();
+    }
+
+    // Ejecuta el regreso real al menu (llamado por ClientRpc en todos)
+    public void ExecuteBackToMenu()
+    {
+        Debug.Log("[Menu] ExecuteBackToMenu");
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
 
         _ResultPanel?.SetActive(false);
         _UIGameplay?.SetActive(false);
+        _WaitPlayer?.SetActive(false);
+        _Join?.SetActive(false);
         _MainMenu.SetActive(true);
 
-        Debug.Log("[Menu] MainMenu activado");
+        if (NetworkManager.Singleton != null)
+            NetworkManager.Singleton.Shutdown();
     }
 
     public void SalirDelJuego()
