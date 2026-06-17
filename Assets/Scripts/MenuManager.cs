@@ -142,7 +142,10 @@ public class MenuManager : MonoBehaviour
         _MainMenu.SetActive(true);
 
         if (NetworkManager.Singleton != null)
+        {
+            GameFlowManager.Instance?.ResetGame();
             NetworkManager.Singleton.Shutdown();
+        }
     }
 
     public void SalirDelJuego()

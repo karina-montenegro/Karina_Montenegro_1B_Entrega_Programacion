@@ -123,6 +123,16 @@ public class GameFlowManager : NetworkBehaviour
         if (MenuManager.Instance != null)
             MenuManager.Instance.ExecuteBackToMenu();
     }
+    public void ResetGame()
+    {
+        _gameEnded = false;
+
+        if (IsServer)
+        {
+            GameStarted.Value = false;
+            TimeRemaining.Value = 0f;
+        }
+    }
 
     private void OnGameStartedChanged(bool oldVal, bool newVal)
     {

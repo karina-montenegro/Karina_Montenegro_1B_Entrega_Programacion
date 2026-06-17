@@ -11,7 +11,7 @@ public class PlayerColor : NetworkBehaviour
         // Solo el host calcula su color y le avisa al Server
         if (IsOwner)
         {
-            int index = (int)(OwnerClientId % (ulong)_colors.Length);
+            int index = IsHost ? 0 : 1;
             SolicitarColorAlServerRpc(index);
         }
     }
